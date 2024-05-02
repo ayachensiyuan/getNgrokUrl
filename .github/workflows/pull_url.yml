@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+            token: ${{ secrets.PAT_TOKEN }}
 
       - name: Get Ngrok URL
         run: |
@@ -36,6 +38,6 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.md
           git commit -m "Update Ngrok Public URL" 
-          git push https://$PAT_TOKEN@github.com/ayachensiyuan/getNgrokUrl.git HEAD:main
+          git push https://${{PAT_TOKEN}}@github.com/ayachensiyuan/getNgrokUrl.git HEAD:main
 
         
