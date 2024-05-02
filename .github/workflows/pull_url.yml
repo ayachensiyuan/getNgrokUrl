@@ -1,6 +1,7 @@
 name: Update Ngrok URL
 
 on:
+  workflow_dispatch:  # 手动触发
   schedule:
     - cron: '0 * * * *'  # 每小时运行一次
 
@@ -11,14 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Get Ngrok URL
         run: |
