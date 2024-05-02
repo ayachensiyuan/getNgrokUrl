@@ -1,0 +1,46 @@
+name: Update Ngrok URL
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时运行一次
+
+jobs:
+  update-url:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Get Ngrok URL
+        run: |
+          # 使用 curl 获取 ngrok URL，并将结果保存到临时文件
+          curl -X GET \
+            -H "Authorization: Bearer ${{secrets.NGROK_TOKEN}}" \
+            -H "Ngrok-Version: 2" \
+            https://api.ngrok.com/endpoints > ngrok_info.json
+
+          # 提取 public_url 并保存到环境变量
+          PUBLIC_URL=$(cat ngrok_info.json | jq -r '.endpoints[0].public_url')
+
+          # 将 public_url 写入 README.md
+          echo "Current Ngrok Public URL: $PUBLIC_URL" > temp_readme.md
+
+          # 替换 README.md
+          mv temp_readme.md README.md
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update Ngrok Public URL"
+          git push
