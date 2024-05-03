@@ -35,12 +35,14 @@ jobs:
             echo "Current Ngrok Public URL: $PUBLIC_URL" > temp_readme.md
             # 替换 README.md
             mv temp_readme.md README.md
-          else
+            FLAG=0
+            else
             echo "Ngrok Public URL has not changed. Exiting..."
-            exit 0
+            FLAG=1
           fi
 
       - name: Commit changes
+        if: ${{ env.FLAG }} != 1
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
