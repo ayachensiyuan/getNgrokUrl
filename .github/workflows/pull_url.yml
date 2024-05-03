@@ -17,6 +17,9 @@ jobs:
 
       - name: Get Ngrok URL
         run: |
+          # 读取之前保存的 public_url
+          PREVIOUS_URL=$(cat README.md | grep "Current Ngrok Public URL" | cut -d ":" -f 2)
+          
           # 使用 curl 获取 ngrok URL，并将结果保存到临时文件
           curl -X GET \
             -H "Authorization: Bearer ${{secrets.NGROK_TOKEN}}" \
@@ -26,8 +29,6 @@ jobs:
           # 提取 public_url 并保存到环境变量
           PUBLIC_URL=$(cat ngrok_info.json | jq -r '.endpoints[0].public_url')
 
-          # 读取之前保存的 public_url
-          PREVIOUS_URL=$(cat README.md | grep "Current Ngrok Public URL" | cut -d ":" -f 2)
 
           # 比较当前的 public_url 和之前保存的 public_url 是否相同
           if [ "$PUBLIC_URL" != "$PREVIOUS_URL" ]; then
@@ -35,14 +36,14 @@ jobs:
             echo "Current Ngrok Public URL: $PUBLIC_URL" > temp_readme.md
             # 替换 README.md
             mv temp_readme.md README.md
-            FLAG=0
-            else
+            echo "FLAG=true" >> $GITHUB_OUTPUT
+          else
             echo "Ngrok Public URL has not changed. Exiting..."
-            FLAG=1
+            echo "FLAG=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Commit changes
-        if: ${{ env.FLAG }} != 1
+        if: ${{ steps.update-url.outputs.FLAG == true }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
