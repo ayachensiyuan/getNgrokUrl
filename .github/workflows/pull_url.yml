@@ -26,11 +26,19 @@ jobs:
           # 提取 public_url 并保存到环境变量
           PUBLIC_URL=$(cat ngrok_info.json | jq -r '.endpoints[0].public_url')
 
-          # 将 public_url 写入 README.md
-          echo "Current Ngrok Public URL: $PUBLIC_URL" > temp_readme.md
+          # 读取之前保存的 public_url
+          PREVIOUS_URL=$(cat README.md | grep "Current Ngrok Public URL" | cut -d ":" -f 2)
 
-          # 替换 README.md
-          mv temp_readme.md README.md
+          # 比较当前的 public_url 和之前保存的 public_url 是否相同
+          if [ "$PUBLIC_URL" != "$PREVIOUS_URL" ]; then
+            # 将 public_url 写入 README.md
+            echo "Current Ngrok Public URL: $PUBLIC_URL" > temp_readme.md
+            # 替换 README.md
+            mv temp_readme.md README.md
+          else
+            echo "Ngrok Public URL has not changed. Exiting..."
+            exit 0
+          fi
 
       - name: Commit changes
         run: |
