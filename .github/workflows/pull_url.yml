@@ -18,7 +18,7 @@ jobs:
       - name: Get Ngrok URL
         run: |
           # 读取之前保存的 public_url
-          PREVIOUS_URL=$(cat README.md | grep "Current Ngrok Public URL" | cut -d ":" -f 2)
+          PREVIOUS_URL=$(jq -r '.endpoints[0].public_url' ngrok_info.json)
           
           # 使用 curl 获取 ngrok URL，并将结果保存到临时文件
           curl -X GET \
