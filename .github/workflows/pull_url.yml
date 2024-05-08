@@ -19,6 +19,8 @@ jobs:
         run: |
           # 读取之前保存的 public_url
           PREVIOUS_URL=$(jq -r '.endpoints[0].public_url' ngrok_info.json)
+
+          echo "Previous Ngrok Public URL: $PREVIOUS_URL"
           
           # 使用 curl 获取 ngrok URL，并将结果保存到临时文件
           curl -X GET \
@@ -27,8 +29,9 @@ jobs:
             https://api.ngrok.com/endpoints > ngrok_info.json
 
           # 提取 public_url 并保存到环境变量
-          PUBLIC_URL=$(cat ngrok_info.json | jq -r '.endpoints[0].public_url')
+          PUBLIC_URL=$(jq -r '.endpoints[0].public_url' ngrok_info.json)
 
+          echo "Current Ngrok Public URL: $PUBLIC_URL"
 
           # 比较当前的 public_url 和之前保存的 public_url 是否相同
           if [ "$PUBLIC_URL" != "$PREVIOUS_URL" ]; then
