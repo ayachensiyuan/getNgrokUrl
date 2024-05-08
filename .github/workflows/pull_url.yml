@@ -16,6 +16,7 @@ jobs:
             token: ${{ secrets.PAT_TOKEN }}
 
       - name: Get Ngrok URL
+        id: get-url
         run: |
           # 读取之前保存的 public_url
           PREVIOUS_URL=$(jq -r '.endpoints[0].public_url' ngrok_info.json)
@@ -46,7 +47,7 @@ jobs:
           fi
 
       - name: Commit changes
-        if: ${{ steps.update-url.outputs.FLAG == true }}
+        if: ${{ steps.get-url.outputs.FLAG == 'true'}}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
