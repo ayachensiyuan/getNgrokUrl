@@ -1,1 +1,1 @@
-Current Ngrok Public URL: https://425d-139-227-12-14.ngrok-free.app
+Current Ngrok Public URL: https://1e80-139-226-13-26.ngrok-free.app
