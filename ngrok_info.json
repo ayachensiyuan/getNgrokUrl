@@ -1,1 +1,1 @@
-{"endpoints":[{"id":"ep_2goIexTazKjLaCT7I7CKrcX0lV6","created_at":"2024-05-22T06:00:02Z","updated_at":"2024-05-22T06:00:02Z","public_url":"https://59ad-139-227-12-14.ngrok-free.app","proto":"https","hostport":"59ad-139-227-12-14.ngrok-free.app:443","type":"ephemeral","tunnel":{"id":"tn_2goIexTazKjLaCT7I7CKrcX0lV6","uri":"https://api.ngrok.com/tunnels/tn_2goIexTazKjLaCT7I7CKrcX0lV6"}}],"uri":"https://api.ngrok.com/endpoints","next_page_uri":null}
+{"endpoints":[],"uri":"https://api.ngrok.com/endpoints","next_page_uri":null}
